@@ -3,61 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PeakLeads OS • Command Center</title>
+  <title>PeakLeads OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  
-  <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
+  </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
 
-  <!-- Auth -->
+  <!-- Auth Screen -->
   <div id="authScreen" class="flex items-center justify-center min-h-screen">
-    <div class="max-w-md w-full p-10 bg-zinc-900 rounded-3xl">
-      <div class="text-center mb-10">
-        <div class="w-20 h-20 bg-white mx-auto rounded-3xl flex items-center justify-center text-6xl font-bold text-black">P</div>
-        <h1 class="text-4xl font-bold mt-6">PeakLeads OS</h1>
-        <p class="text-zinc-400">Inland Empire Roofing Growth System</p>
+    <div class="max-w-md w-full p-12 glass rounded-3xl border border-white/10">
+      <div class="text-center mb-12">
+        <div class="w-20 h-20 bg-white mx-auto rounded-3xl flex items-center justify-center text-6xl font-bold text-black shadow-xl">P</div>
+        <h1 class="text-5xl font-semibold mt-8 tracking-tight">PeakLeads OS</h1>
+        <p class="text-zinc-400 mt-3 text-lg">Inland Empire Roofing Command Center</p>
       </div>
-      <input id="email" placeholder="Email" class="w-full px-6 py-4 bg-zinc-800 rounded-3xl mb-4">
-      <input id="password" type="password" placeholder="Password" class="w-full px-6 py-4 bg-zinc-800 rounded-3xl mb-8">
-      <button onclick="signUp()" class="w-full bg-emerald-600 py-4 rounded-3xl font-semibold mb-3">Create New Account</button>
-      <button onclick="signIn()" class="w-full bg-white text-black py-4 rounded-3xl font-semibold">Sign In</button>
+
+      <div class="space-y-4">
+        <input id="email" placeholder="Business Email" class="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-3xl focus:outline-none focus:border-white/30 text-lg">
+        <input id="password" type="password" placeholder="Password" class="w-full px-6 py-5 bg-white/5 border border-white/10 rounded-3xl focus:outline-none focus:border-white/30 text-lg">
+      </div>
+
+      <button onclick="signUp()" class="w-full mt-8 bg-white text-black py-5 rounded-3xl font-semibold text-lg tracking-tight hover:bg-gray-100 transition">
+        Create Account
+      </button>
+      <button onclick="signIn()" class="w-full mt-4 border border-white/30 py-5 rounded-3xl font-semibold text-lg tracking-tight hover:bg-white/5 transition">
+        Sign In
+      </button>
     </div>
   </div>
 
-  <!-- Owner Dashboard -->
-  <div id="dashboard" class="hidden p-8">
-    <nav class="bg-black p-6 flex justify-between rounded-3xl mb-8">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-black text-2xl font-bold">P</div>
-        <span class="text-3xl font-semibold">PeakLeads</span>
+  <!-- Premium Dashboard -->
+  <div id="dashboard" class="hidden min-h-screen p-10">
+    <nav class="max-w-7xl mx-auto flex justify-between items-center mb-12">
+      <div class="flex items-center gap-4">
+        <div class="w-11 h-11 bg-white rounded-2xl flex items-center justify-center text-black text-3xl font-bold">P</div>
+        <span class="text-3xl font-semibold tracking-tight">PeakLeads</span>
       </div>
-      <button onclick="logout()" class="px-6 py-3 bg-zinc-800 rounded-3xl">Sign Out</button>
+      <button onclick="logout()" class="px-8 py-3.5 border border-white/30 rounded-3xl hover:bg-white/5">Sign Out</button>
     </nav>
 
-    <h1 class="text-5xl font-semibold">Command Center • Brandon</h1>
-    <p class="text-emerald-400 mt-2">Real Accounts • YouTube Ad Tracking • KPI Dashboard</p>
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-6xl font-semibold tracking-tighter">Command Center • Brandon</h1>
+      <p class="text-emerald-400 text-xl mt-2">Real-time Client Performance</p>
 
-    <div class="mt-10 bg-zinc-900 rounded-3xl p-8">
-      <h2 class="text-3xl mb-6">Client Performance</h2>
-      <div id="clientsTable" class="space-y-4"></div>
+      <div id="clientsTable" class="mt-12 grid grid-cols-1 gap-6"></div>
     </div>
-
-    <button onclick="sendWeeklyUpdates()" class="mt-8 bg-emerald-600 px-10 py-4 rounded-3xl font-semibold text-lg">📧 Send Weekly KPI Reports (1-Click)</button>
   </div>
 
   <script>
+    // === PASTE YOUR FIREBASE CONFIG HERE ===
     const firebaseConfig = {
-      // PASTE YOUR FULL FIREBASE CONFIG HERE
       apiKey: "",
       authDomain: "",
       projectId: "",
@@ -69,32 +69,50 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    const clients = [
-      {name: "Temecula Roofing Co", leads: 28, booked: 11, status: "green"},
-      {name: "Murrieta Roof Masters", leads: 19, booked: 6, status: "yellow"},
-      {name: "Inland Empire Exteriors", leads: 12, booked: 2, status: "red"}
-    ];
+    function signUp() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if (!email || !password) return alert("Please fill in email and password");
 
-    function renderClients() {
-      let html = '';
-      clients.forEach(c => {
-        const color = c.status === 'green' ? 'emerald' : c.status === 'yellow' ? 'amber' : 'red';
-        html += `<div class="bg-zinc-800 p-6 rounded-3xl flex justify-between"><div><strong>${c.name}</strong><br>${c.leads} leads • ${c.booked} booked</div><span class="text-${color}-400 font-semibold">${c.status.toUpperCase()}</span></div>`;
-      });
-      document.getElementById('clientsTable').innerHTML = html;
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("✅ Account created successfully. You can now sign in.");
+        })
+        .catch(err => alert(err.message));
     }
 
-    function sendWeeklyUpdates() {
-      alert("✅ Weekly Reports Sent to All Clients!\n\nYouTube Ads • Leads • AI Calls • Performance Status");
-    }
-
-    function signUp() { /* add your signUp function from previous */ alert("Account created"); }
     function signIn() {
-      document.getElementById('authScreen').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-      renderClients();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          document.getElementById('authScreen').classList.add('hidden');
+          document.getElementById('dashboard').classList.remove('hidden');
+          renderClients();
+        })
+        .catch(err => alert(err.message));
     }
-    function logout() { location.reload(); }
+
+    function logout() {
+      auth.signOut();
+      location.reload();
+    }
+
+    // Sample Clients
+    function renderClients() {
+      const clientsHTML = `
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-zinc-900 rounded-3xl p-8 border border-emerald-500/30">
+            <div class="flex justify-between"><span class="text-xl font-semibold">Temecula Roofing Co</span><span class="text-emerald-400 font-medium">EXCELLENT</span></div>
+            <p class="text-4xl mt-6 font-semibold">28 leads • 11 booked</p>
+          </div>
+          <div class="bg-zinc-900 rounded-3xl p-8 border border-amber-500/30">
+            <div class="flex justify-between"><span class="text-xl font-semibold">Murrieta Roof Masters</span><span class="text-amber-400 font-medium">ATTENTION NEEDED</span></div>
+            <p class="text-4xl mt-6 font-semibold">19 leads • 6 booked</p>
+          </div>
+        </div>`;
+      document.getElementById('clientsTable').innerHTML = clientsHTML;
+    }
   </script>
 </body>
 </html>
