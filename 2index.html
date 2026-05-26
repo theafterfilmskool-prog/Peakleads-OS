@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PeakLeads OS • Roofing Growth Command Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .nav-active { border-bottom: 3px solid black; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white">
+
+  <!-- LOGIN SCREEN (First view) -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full p-8 bg-zinc-900 rounded-3xl">
+      <div class="flex items-center gap-3 mb-8 justify-center">
+        <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-black font-bold text-xl">P</div>
+        <span class="text-3xl font-semibold">PeakLeads</span>
+      </div>
+      <h1 class="text-3xl font-semibold text-center mb-2">Welcome Back</h1>
+      <p class="text-center text-zinc-400 mb-8">Inland Empire Roofing Command Center</p>
+      
+      <input id="email" type="email" placeholder="Email" class="w-full px-6 py-4 bg-zinc-800 rounded-3xl mb-4 focus:outline-none">
+      <input id="password" type="password" placeholder="Password" class="w-full px-6 py-4 bg-zinc-800 rounded-3xl mb-6 focus:outline-none">
+      
+      <button onclick="login()" class="w-full bg-white text-black py-4 rounded-3xl font-semibold">Sign In</button>
+      <p class="text-center text-xs text-zinc-500 mt-6">Demo: Use any email • Roles auto-detect</p>
+    </div>
+  </div>
+
+  <!-- MAIN APP (Hidden until login) -->
+  <div id="mainApp" class="hidden min-h-screen">
+
+    <!-- TOP NAV -->
+    <nav class="bg-black border-b border-zinc-800 px-8 py-4 flex items-center justify-between sticky top-0 z-50">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-white rounded-2xl flex items-center justify-center text-black font-bold">P</div>
+          <span class="font-semibold text-2xl">PeakLeads</span>
+        </div>
+        <div onclick="switchRole('owner')" class="cursor-pointer nav-link px-4 py-2 text-sm font-medium">Owner</div>
+        <div onclick="switchRole('employee')" class="cursor-pointer nav-link px-4 py-2 text-sm font-medium">Team</div>
+        <div onclick="switchRole('client')" class="cursor-pointer nav-link px-4 py-2 text-sm font-medium">Roofer Client</div>
+      </div>
+      <div class="flex items-center gap-6">
+        <button onclick="logout()" class="text-sm font-medium text-zinc-400 hover:text-white">Sign Out</button>
+        <div class="w-9 h-9 bg-zinc-700 rounded-2xl"></div>
+      </div>
+    </nav>
+
+    <!-- OWNER DASHBOARD (Default) -->
+    <div id="ownerDashboard" class="p-8">
+      <h1 class="text-5xl font-semibold tracking-tighter mb-2">Command Center</h1>
+      <p class="text-zinc-400">May 26 • Murrieta, CA</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10">
+        <div class="bg-zinc-900 rounded-3xl p-6">
+          <div class="text-emerald-400 text-sm">ACTIVE CLIENTS</div>
+          <div class="text-6xl font-semibold mt-2">5</div>
+          <div class="text-sm text-zinc-400">+2 this month</div>
+        </div>
+        <div class="bg-zinc-900 rounded-3xl p-6">
+          <div class="text-emerald-400 text-sm">LEADS GENERATED</div>
+          <div class="text-6xl font-semibold mt-2">187</div>
+          <div class="text-sm text-zinc-400">This month • 87% AI handled</div>
+        </div>
+        <div class="bg-zinc-900 rounded-3xl p-6">
+          <div class="text-emerald-400 text-sm">MONTHLY RECURRING</div>
+          <div class="text-6xl font-semibold mt-2">$4,200</div>
+          <div class="text-sm text-zinc-400">Target: $12,500</div>
+        </div>
+        <div class="bg-zinc-900 rounded-3xl p-6">
+          <div class="text-emerald-400 text-sm">AI CALLS ANSWERED</div>
+          <div class="text-6xl font-semibold mt-2">1,247</div>
+          <div class="text-sm text-zinc-400">98% qualification rate</div>
+        </div>
+      </div>
+
+      <!-- AI PHONE SYSTEM -->
+      <div class="mt-12">
+        <h2 class="text-3xl font-semibold mb-6">AI Phone System • Live</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-zinc-900 rounded-3xl p-8">
+            <h3 class="font-semibold mb-4">Recent Calls (Roofers Dashboard View)</h3>
+            <div class="space-y-4 text-sm">
+              <div class="flex justify-between items-center"><span>✅ [AI] Qualified lead - Temecula roof repair</span><span class="text-emerald-400">Booked</span></div>
+              <div class="flex justify-between items-center"><span>📞 Missed → AI Follow-up sent</span><span class="text-amber-400">Follow-up</span></div>
+            </div>
+            <button class="mt-6 w-full bg-white text-black py-4 rounded-3xl">View Full Call Log + Transcripts</button>
+          </div>
+          <div class="bg-zinc-900 rounded-3xl p-8">
+            <h3 class="font-semibold mb-4">Train AI Voice (Roofer Specific)</h3>
+            <p class="text-zinc-400">Upload scripts: "We're the #1 Inland Empire roofers..."</p>
+            <input type="text" placeholder="Add custom response trigger" class="w-full mt-4 px-6 py-4 bg-zinc-800 rounded-3xl">
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL MARKETING (Superior to Mailchimp) -->
+      <div class="mt-12">
+        <h2 class="text-3xl font-semibold mb-6">PeakMail • AI Email Engine</h2>
+        <div class="bg-zinc-900 rounded-3xl p-8">
+          <div class="flex justify-between mb-6">
+            <div>Campaigns • Open Rate: 68% (vs Mailchimp 22% avg)</div>
+            <button class="bg-white text-black px-6 py-3 rounded-3xl text-sm">New AI Campaign</button>
+          </div>
+          <div class="grid grid-cols-3 gap-4 text-sm">
+            <div class="bg-zinc-800 p-6 rounded-3xl">Welcome Sequence<br><span class="text-emerald-400">92% delivered</span></div>
+            <div class="bg-zinc-800 p-6 rounded-3xl">Re-engagement (Past Leads)<br><span class="text-emerald-400">41 booked calls</span></div>
+            <div class="bg-zinc-800 p-6 rounded-3xl">Client Testimonial Blast</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENT (Roofer) DASHBOARD -->
+    <div id="clientDashboard" class="hidden p-8">
+      <h1 class="text-5xl font-semibold">Your Lead Dashboard • Brandon Roofing</h1>
+      <div class="mt-10 bg-zinc-900 rounded-3xl p-8">
+        <h2 class="text-2xl mb-6">15 New Leads This Month • 8 Booked</h2>
+        <!-- Leads table, AI call status, etc. -->
+      </div>
+    </div>
+
+    <!-- EMPLOYEE DASHBOARD -->
+    <div id="employeeDashboard" class="hidden p-8">
+      <h1 class="text-5xl font-semibold">Team Command • Leads Assigned</h1>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('mainApp').classList.remove('hidden');
+      switchRole('owner');
+    }
+
+    function logout() {
+      document.getElementById('mainApp').classList.add('hidden');
+      document.getElementById('loginScreen').classList.remove('hidden');
+    }
+
+    function switchRole(role) {
+      document.getElementById('ownerDashboard').classList.add('hidden');
+      document.getElementById('clientDashboard').classList.add('hidden');
+      document.getElementById('employeeDashboard').classList.add('hidden');
+      
+      if (role === 'owner') document.getElementById('ownerDashboard').classList.remove('hidden');
+      if (role === 'client') document.getElementById('clientDashboard').classList.remove('hidden');
+      if (role === 'employee') document.getElementById('employeeDashboard').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
